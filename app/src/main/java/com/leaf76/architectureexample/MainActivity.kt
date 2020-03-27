@@ -5,9 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -56,6 +59,26 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, "Get Notes $t")
             adapter.setNotes(t)
         })
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                noteViewModel.delete(adapter.getNoteAt(viewHolder.adapterPosition))
+                Toast.makeText(baseContext, "Note deleted", Toast.LENGTH_LONG).show()
+            }
+        }).attachToRecyclerView(recyclerView)
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -70,9 +93,28 @@ class MainActivity : AppCompatActivity() {
             val note = Note(title, description, priority)
             noteViewModel.insert(note)
 
-            Toast.makeText(this, "Note saved", Toast.LENGTH_LONG).show()
+            Toast.makeText(baseContext, "Note saved", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(this, "Note not saved", Toast.LENGTH_LONG).show()
+            Toast.makeText(baseContext, "Note not saved", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_all_notes -> {
+                noteViewModel.deleteAllNotes()
+                Toast.makeText(baseContext, "All notes deleted", Toast.LENGTH_LONG).show()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 
