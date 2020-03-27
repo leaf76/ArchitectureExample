@@ -58,8 +58,10 @@ class MainActivity : AppCompatActivity() {
         // kotlin live data use
         noteViewModel.getAllNotes().observe(this, Observer<List<Note>> { t: List<Note> ->
             Log.i(TAG, "Get Notes $t")
-            adapter.setNotes(t)
+//            adapter.setNotes(t)
+            adapter.submitList(t)
         })
+
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0,
