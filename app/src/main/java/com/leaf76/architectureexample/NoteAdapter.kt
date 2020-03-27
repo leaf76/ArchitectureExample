@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
-    private lateinit var notes: List<Note>
+    private var notes: List<Note> = arrayListOf()
 
     inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewTitle: TextView = itemView.findViewById(R.id.text_view_title)
