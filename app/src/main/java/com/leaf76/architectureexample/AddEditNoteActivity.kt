@@ -12,12 +12,13 @@ import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Toast
 
-class AddNoteActivity : AppCompatActivity() {
+class AddEditNoteActivity : AppCompatActivity() {
 
-    companion object{
-        const val EXTRA_TITLE:String = "com.leaf76.architectureexample.EXTRA_TITLE"
-        const val EXTRA_DESCRIPTION:String = "com.leaf76.architectureexample.EXTRA_DESCRIPTION"
-        const val EXTRA_PRIORITY:String = "com.leaf76.architectureexample.EXTRA_PRIORITY"
+    companion object {
+        const val EXTRA_ID: String = "com.leaf76.architectureexample.EXTRA_ID"
+        const val EXTRA_TITLE: String = "com.leaf76.architectureexample.EXTRA_TITLE"
+        const val EXTRA_DESCRIPTION: String = "com.leaf76.architectureexample.EXTRA_DESCRIPTION"
+        const val EXTRA_PRIORITY: String = "com.leaf76.architectureexample.EXTRA_PRIORITY"
     }
 
     private lateinit var editTextTitle: EditText
@@ -37,7 +38,20 @@ class AddNoteActivity : AppCompatActivity() {
         numberPickerPriority.maxValue = 10
 
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
-        title = "Add note"
+
+        val intent = intent
+
+        if (intent.hasExtra(EXTRA_ID)) {
+            title = "Edit Note"
+            editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE))
+            editTextDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION))
+            numberPickerPriority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
+
+        } else {
+            title = "Add note"
+        }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -72,9 +86,15 @@ class AddNoteActivity : AppCompatActivity() {
         }
 
         val data = Intent()
-        data.putExtra(EXTRA_TITLE,title)
-        data.putExtra(EXTRA_DESCRIPTION,description)
-        data.putExtra(EXTRA_PRIORITY,priority)
+        data.putExtra(EXTRA_TITLE, title)
+        data.putExtra(EXTRA_DESCRIPTION, description)
+        data.putExtra(EXTRA_PRIORITY, priority)
+
+        val id = intent.getIntExtra(EXTRA_ID, -1)
+
+        if(id != -1){
+            data.putExtra(EXTRA_ID, id)
+        }
 
         setResult(Activity.RESULT_OK, data)
         finish()

@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val ADD_NOTE_REQUEST = 1
+        const val EDIT_NOTE_REQUEST = 2
     }
 
     private val TAG: String = "MainActivity"
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val buttonAddNote: FloatingActionButton = findViewById(R.id.button_add_note)
         buttonAddNote.setOnClickListener {
-            val intent = Intent(this, AddNoteActivity::class.java)
+            val intent = Intent(this, AddEditNoteActivity::class.java)
             startActivityForResult(intent, ADD_NOTE_REQUEST)
         }
 
@@ -78,6 +79,20 @@ class MainActivity : AppCompatActivity() {
             }
         }).attachToRecyclerView(recyclerView)
 
+        adapter.setOnItemClickListener(object: NoteAdapter.OnItemClickListener {
+            override fun onItemClick(note: Note) {
+                val intent = Intent(baseContext, AddEditNoteActivity::class.java)
+
+
+                intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.Id)
+                intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.title)
+                intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.description)
+                intent.putExtra(AddEditNoteActivity.EXTRA_PRIORITY, note.priorty)
+
+                startActivityForResult(intent, EDIT_NOTE_REQUEST)
+
+            }
+        })
 
     }
 
@@ -85,16 +100,37 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == ADD_NOTE_REQUEST && resultCode == Activity.RESULT_OK) {
-            val title: String = data?.getStringExtra(AddNoteActivity.EXTRA_TITLE) ?: "NoTitle"
+            val title: String = data?.getStringExtra(AddEditNoteActivity.EXTRA_TITLE) ?: "NoTitle"
             val description: String =
-                data?.getStringExtra(AddNoteActivity.EXTRA_DESCRIPTION) ?: "No description"
-            val priority: Int = data?.getIntExtra(AddNoteActivity.EXTRA_PRIORITY, 1) ?: 0
+                data?.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION) ?: "No description"
+            val priority: Int = data?.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1) ?: 0
 
             val note = Note(title, description, priority)
             noteViewModel.insert(note)
 
             Toast.makeText(baseContext, "Note saved", Toast.LENGTH_LONG).show()
-        } else {
+        } else if (requestCode == EDIT_NOTE_REQUEST && resultCode == Activity.RESULT_OK){
+            val id = data?.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1)
+
+            if(id == -1){
+                Toast.makeText(baseContext, "Note can't be updated", Toast.LENGTH_LONG).show()
+                return
+            }
+
+            val title: String = data?.getStringExtra(AddEditNoteActivity.EXTRA_TITLE) ?: "NoTitle"
+            val description: String =
+                data?.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION) ?: "No description"
+            val priority: Int = data?.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1) ?: 0
+
+            val note = Note(title, description, priority)
+
+            note.Id = id!!
+
+            noteViewModel.update(note)
+
+            Toast.makeText(baseContext, "Note updated!",Toast.LENGTH_LONG).show()
+        }
+        else {
             Toast.makeText(baseContext, "Note not saved", Toast.LENGTH_LONG).show()
         }
     }
