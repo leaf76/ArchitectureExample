@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.leaf76.architectureexample.Adapters.NoteAdapter
+import com.leaf76.architectureexample.Data.Note
+import com.leaf76.architectureexample.ViewModels.NoteViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -107,7 +110,11 @@ class MainActivity : AppCompatActivity() {
                 data?.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION) ?: "No description"
             val priority: Int = data?.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1) ?: 0
 
-            val note = Note(title, description, priority)
+            val note = Note(
+                title,
+                description,
+                priority
+            )
             noteViewModel.insert(note)
 
             Toast.makeText(baseContext, "Note saved", Toast.LENGTH_LONG).show()
@@ -124,7 +131,11 @@ class MainActivity : AppCompatActivity() {
                 data?.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION) ?: "No description"
             val priority: Int = data?.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1) ?: 0
 
-            val note = Note(title, description, priority)
+            val note = Note(
+                title,
+                description,
+                priority
+            )
 
             note.Id = id!!
 

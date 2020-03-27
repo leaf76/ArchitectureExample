@@ -1,4 +1,4 @@
-package com.leaf76.architectureexample
+package com.leaf76.architectureexample.Data
 
 import android.app.Application
 import android.os.AsyncTask
@@ -17,19 +17,27 @@ class NoteRepository(application: Application) {
     }
 
     fun insert(note: Note) {
-        InsertNoteAsyncTask(noteDao).execute(note)
+        InsertNoteAsyncTask(
+            noteDao
+        ).execute(note)
     }
 
     fun update(note: Note) {
-        UpdateNoteAsyncTask(noteDao).execute(note)
+        UpdateNoteAsyncTask(
+            noteDao
+        ).execute(note)
     }
 
     fun delete(note: Note) {
-        DeleteNoteAsyncTask(noteDao).execute(note)
+        DeleteNoteAsyncTask(
+            noteDao
+        ).execute(note)
     }
 
     fun deleteAllnotes() {
-        DeleteAllNotesAsyncTask(noteDao).execute()
+        DeleteAllNotesAsyncTask(
+            noteDao
+        ).execute()
     }
 
     fun getAllNotes(): LiveData<List<Note>> {

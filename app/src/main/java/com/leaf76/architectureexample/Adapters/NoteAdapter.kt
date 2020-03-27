@@ -1,4 +1,4 @@
-package com.leaf76.architectureexample
+package com.leaf76.architectureexample.Adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.leaf76.architectureexample.Data.Note
+import com.leaf76.architectureexample.R
 
-class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteHolder>(DIFF_CALLBACK) {
+class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteHolder>(
+    DIFF_CALLBACK
+) {
     // this is Recycler.Adapter using that was removed
     // private var notes: List<Note> = arrayListOf()
 

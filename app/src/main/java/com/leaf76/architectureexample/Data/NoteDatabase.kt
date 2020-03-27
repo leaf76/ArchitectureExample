@@ -1,4 +1,4 @@
-package com.leaf76.architectureexample
+package com.leaf76.architectureexample.Data
 
 import android.content.Context
 import android.os.AsyncTask
@@ -36,7 +36,9 @@ abstract class NoteDatabase : RoomDatabase() {
         private val roomCallbackL: Callback = object : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-                PopulateDbAsyncTask(instance).execute()
+                PopulateDbAsyncTask(
+                    instance
+                ).execute()
             }
         }
 
@@ -45,9 +47,27 @@ abstract class NoteDatabase : RoomDatabase() {
             private val noteDao: NoteDao = db.noteDao()
 
             override fun doInBackground(vararg units: Unit) {
-                noteDao.insert(Note("Title1", "Description1", 1))
-                noteDao.insert(Note("Title2", "Description2", 2))
-                noteDao.insert(Note("Title3", "Description3", 3))
+                noteDao.insert(
+                    Note(
+                        "Title1",
+                        "Description1",
+                        1
+                    )
+                )
+                noteDao.insert(
+                    Note(
+                        "Title2",
+                        "Description2",
+                        2
+                    )
+                )
+                noteDao.insert(
+                    Note(
+                        "Title3",
+                        "Description3",
+                        3
+                    )
+                )
             }
         }
     }

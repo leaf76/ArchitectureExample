@@ -1,4 +1,4 @@
-package com.leaf76.architectureexample
+package com.leaf76.architectureexample.Data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

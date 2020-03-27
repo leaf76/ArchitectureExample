@@ -1,7 +1,8 @@
-package com.leaf76.architectureexample
+package com.leaf76.architectureexample.Data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.leaf76.architectureexample.Data.Note
 
 @Dao
 interface NoteDao {
